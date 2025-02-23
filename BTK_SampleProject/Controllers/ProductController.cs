@@ -3,6 +3,7 @@ using BTK_SampleProject.Entities;
 using BTK_SampleProject.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BTK_SampleProject.Controllers
 {
@@ -34,6 +35,29 @@ namespace BTK_SampleProject.Controllers
             }
             return BadRequest();
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetProductsByCategoryId(Guid categoryId)
+        {
+            var result = await _context.Categories
+                    .Include(x => x.Products)
+                    .Where(x => x.Id == categoryId).ToListAsync();
+
+            if (result.Count > 0)
+            {
+                return Ok(result);
+            }
+
+            return NotFound();
+
+        }
+
+
+
+
+
+
+
 
     }
 }
