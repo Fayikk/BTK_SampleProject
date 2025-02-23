@@ -13,7 +13,7 @@ namespace BTK_SampleProject.Services
             _context = context;
         }
 
-        public Task<Category> AddCategory(CategoryModel model)
+        public async Task<Category> AddCategory(CategoryModel model)
         {
             Category category = new Category();
             category.CategoryName = model.CategoryName;
@@ -21,9 +21,14 @@ namespace BTK_SampleProject.Services
             await _context.Categories.AddAsync(category);
             if (await _context.SaveChangesAsync() > 0)
             {
-                return Ok(category);
+                return category;
             }
-            return BadRequest();
+            return null;
+        }
+
+        public void DeleteCategory(Guid categoryId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

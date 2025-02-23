@@ -1,6 +1,7 @@
 ﻿using BTK_SampleProject.AppDbContext;
 using BTK_SampleProject.Entities;
 using BTK_SampleProject.Models;
+using BTK_SampleProject.Services.Interface;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,9 +11,10 @@ namespace BTK_SampleProject.Controllers
     [ApiController]
     public class CategoryController : ControllerBase
     {
-        public CategoryController()
+        private readonly ICategoryService _categoryService;
+        public CategoryController(ICategoryService categoryService)
         {
-          
+            _categoryService = categoryService;
         }
 
 
@@ -21,7 +23,12 @@ namespace BTK_SampleProject.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateCategory(CategoryModel model)
         {
-           
+            var result = await _categoryService.AddCategory(model);
+            if (result is not null)
+            {
+                return Ok(result);
+            }
+            return BadRequest();
         }
 
         //[HttpGet]

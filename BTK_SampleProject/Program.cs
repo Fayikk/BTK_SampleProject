@@ -1,4 +1,6 @@
 using BTK_SampleProject.AppDbContext;
+using BTK_SampleProject.Services;
+using BTK_SampleProject.Services.Interface;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,6 +10,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddDbContext<ApplicationDbContext>(opt
     => opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultDatabase")));
+
+builder.Services.AddScoped<ICategoryService, CategoryService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
