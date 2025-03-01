@@ -1,6 +1,7 @@
 ﻿using BTK_SampleProject.AppDbContext;
 using BTK_SampleProject.Entities;
 using BTK_SampleProject.Models;
+using BTK_SampleProject.Services.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,46 +12,39 @@ namespace BTK_SampleProject.Controllers
     [ApiController]
     public class ProductController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
-        public ProductController(ApplicationDbContext context)
+        private readonly IProductService productService;
+        public ProductController(IProductService productService)
         {
-            _context = context;
+            this.productService = productService;
         }
 
 
         [HttpPost]
-        public async Task<IActionResult> CreateProduct(ProductModel product)
+        public async Task<IActionResult> CreateProduct(ProductDTO product)
         {
-            Product pObj = new Product()
+            var result = await productService.CreateProduct(product);
+            if (result is not null)
             {
-                ProductName = product.ProductName,
-                ProductDescription = product.ProductDescription,
-                ProductPrice = product.ProductPrice,
-                CategoryId = product.CategoryId
-            };
-            await _context.Products.AddAsync(pObj);
-            if (await _context.SaveChangesAsync()>0)
-            {
-                return Ok(product);
+                return Ok(result);
             }
             return BadRequest();
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetProductsByCategoryId(Guid categoryId)
-        {
-            var result = await _context.Categories
-                    .Include(x => x.Products)
-                    .Where(x => x.Id == categoryId).ToListAsync();
+        //[HttpGet]
+        //public async Task<IActionResult> GetProductsByCategoryId(Guid categoryId)
+        //{
+        //    var result = await _context.Categories
+        //            .Include(x => x.Products)
+        //            .Where(x => x.Id == categoryId).ToListAsync();
 
-            if (result.Count > 0)
-            {
-                return Ok(result);
-            }
+        //    if (result.Count > 0)
+        //    {
+        //        return Ok(result);
+        //    }
 
-            return NotFound();
+        //    return NotFound();
 
-        }
+        //}
 
 
 

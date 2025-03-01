@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BTK_SampleProject.Models
 {
-    public class ProductModel
+    public class ProductDTO
     {
         public string ProductName { get; set; }
         public string ProductDescription { get; set; }

@@ -21,7 +21,7 @@ namespace BTK_SampleProject.Controllers
         //400,404,500,200 ok
 
         [HttpPost]
-        public async Task<IActionResult> CreateCategory(CategoryModel model)
+        public async Task<IActionResult> CreateCategory(CategoryDTO model)
         {
             var result = await _categoryService.AddCategory(model);
             if (result is not null)
@@ -32,10 +32,10 @@ namespace BTK_SampleProject.Controllers
         }
 
         [HttpGet("GetCategory")]
-        public async Task<IActionResult> GetCategoryById([FromQuery]Guid categoryId)
+        public async Task<IActionResult> GetCategoryById([FromQuery] Guid categoryId)
         {
             var result = await _categoryService.GetCategory(categoryId);
-            if(result is not null)
+            if (result is not null)
             {
                 return Ok(result);
             }
@@ -69,22 +69,19 @@ namespace BTK_SampleProject.Controllers
         //    return NotFound();
         //}
 
-        //[HttpPut]
-        //public async Task<IActionResult> UpdateCategory(Guid categoryId)
-        //{
-        //    var category = await _context.Categories.FindAsync(categoryId);
-        //    if(category is not null)
-        //    {
-        //        category.CategoryName = "Phone";
-        //        category.CategoryDescription = "Phones";
-        //        if (await _context.SaveChangesAsync() > 0)
-        //        {
-        //            return Ok(category);
-        //        }
-        //    }
-        //    return NotFound();
+        [HttpPut("{categoryId}")]
+        public async Task<IActionResult> UpdateCategory([FromRoute] Guid categoryId, [FromBody] UpdateCategoryDTO categoryDTO)
+        {
 
-        //}
+            var result = await _categoryService.UpdateCategory(categoryId, categoryDTO);
 
+            if (result is not null)
+            {
+                return Ok(result);
+            }
+            return NotFound();
+
+
+        }
     }
 }

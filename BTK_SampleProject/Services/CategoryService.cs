@@ -1,4 +1,5 @@
-﻿using BTK_SampleProject.AppDbContext;
+﻿using AutoMapper;
+using BTK_SampleProject.AppDbContext;
 using BTK_SampleProject.Entities;
 using BTK_SampleProject.Models;
 using BTK_SampleProject.Services.Interface;
@@ -9,16 +10,23 @@ namespace BTK_SampleProject.Services
     public class CategoryService : ICategoryService
     {
         private readonly ApplicationDbContext _context;
-        public CategoryService(ApplicationDbContext context)
+        private readonly IMapper _mapper; 
+        public CategoryService(ApplicationDbContext context,IMapper mapper)
         {
+            _mapper = mapper;
             _context = context;
         }
 
-        public async Task<Category> AddCategory(CategoryModel model)
+        public async Task<Category> AddCategory(CategoryDTO model)
         {
-            Category category = new Category();
-            category.CategoryName = model.CategoryName;
-            category.CategoryDescription = model.CategoryDescription;
+
+            #region Mapleme
+            //category.CategoryName = model.CategoryName;
+            //category.CategoryDescription = model.CategoryDescription;
+            Category category = _mapper.Map<Category>(model);
+            #endregion
+
+
             await _context.Categories.AddAsync(category);
             if (await _context.SaveChangesAsync() > 0)
             {
@@ -42,6 +50,22 @@ namespace BTK_SampleProject.Services
             }
             return category;
         
+        }
+
+        public async Task<Category> UpdateCategory(Guid categoryId, UpdateCategoryDTO categoryDTO)
+        {
+            var category = await _context.Categories.FindAsync(categoryId);
+            if (category is not null)
+            {
+
+                _mapper.Map(categoryDTO, category);
+                _context.Categories.Update(category);
+                if (await _context.SaveChangesAsync() > 0)
+                {
+                    return category;
+                }
+            }
+            return null;
         }
     }
 }
