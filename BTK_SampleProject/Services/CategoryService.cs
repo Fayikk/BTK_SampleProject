@@ -2,6 +2,7 @@
 using BTK_SampleProject.Entities;
 using BTK_SampleProject.Models;
 using BTK_SampleProject.Services.Interface;
+using Microsoft.EntityFrameworkCore;
 
 namespace BTK_SampleProject.Services
 {
@@ -29,6 +30,18 @@ namespace BTK_SampleProject.Services
         public void DeleteCategory(Guid categoryId)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<Category> GetCategory(Guid categoryId)
+        {
+            Category category = await _context
+                    .Categories.FirstOrDefaultAsync(x => x.Id == categoryId);
+            if (category == null) {
+                return null;
+            
+            }
+            return category;
+        
         }
     }
 }

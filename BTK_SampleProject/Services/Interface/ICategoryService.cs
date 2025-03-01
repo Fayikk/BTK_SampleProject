@@ -8,5 +8,6 @@ namespace BTK_SampleProject.Services.Interface
         Task<Category> AddCategory(CategoryModel model);
 
         void DeleteCategory(Guid categoryId);
+        Task<Category> GetCategory(Guid categoryId);
     }
 }

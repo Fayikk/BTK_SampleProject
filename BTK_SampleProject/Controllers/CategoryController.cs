@@ -31,6 +31,17 @@ namespace BTK_SampleProject.Controllers
             return BadRequest();
         }
 
+        [HttpGet("GetCategory")]
+        public async Task<IActionResult> GetCategoryById([FromQuery]Guid categoryId)
+        {
+            var result = await _categoryService.GetCategory(categoryId);
+            if(result is not null)
+            {
+                return Ok(result);
+            }
+            return NotFound();
+        }
+
         //[HttpGet]
         //public async Task<IActionResult> GetAllCategories()
         //{
