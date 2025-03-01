@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using BTK_SampleProject.AppDbContext;
 using BTK_SampleProject.Entities;
+using BTK_SampleProject.Messages;
 using BTK_SampleProject.Models;
+using BTK_SampleProject.Response;
 using BTK_SampleProject.Services.Interface;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,14 +12,16 @@ namespace BTK_SampleProject.Services
     public class CategoryService : ICategoryService
     {
         private readonly ApplicationDbContext _context;
-        private readonly IMapper _mapper; 
-        public CategoryService(ApplicationDbContext context,IMapper mapper)
+        private readonly IMapper _mapper;
+        private readonly BaseResponseModel _responseModel;
+        public CategoryService(ApplicationDbContext context,IMapper mapper,BaseResponseModel responseModel)
         {
+            _responseModel = responseModel;
             _mapper = mapper;
             _context = context;
         }
 
-        public async Task<Category> AddCategory(CategoryDTO model)
+        public async Task<BaseResponseModel> AddCategory(CategoryDTO model)
         {
 
             #region Mapleme
@@ -30,9 +34,16 @@ namespace BTK_SampleProject.Services
             await _context.Categories.AddAsync(category);
             if (await _context.SaveChangesAsync() > 0)
             {
-                return category;
+
+                _responseModel.Data = category;
+                _responseModel.isSuccess = true;
+                _responseModel.Message = ResponseMessages.Eklendi;
+
+                return _responseModel;
             }
-            return null;
+            _responseModel.isSuccess = false;
+            _responseModel.Message = ResponseMessages.Hata;
+            return _responseModel;
         }
 
         public void DeleteCategory(Guid categoryId)
@@ -40,7 +51,7 @@ namespace BTK_SampleProject.Services
             throw new NotImplementedException();
         }
 
-        public async Task<Category> GetCategory(Guid categoryId)
+        public async Task<BaseResponseModel> GetCategory(Guid categoryId)
         {
             Category category = await _context
                     .Categories.FirstOrDefaultAsync(x => x.Id == categoryId);
@@ -48,11 +59,14 @@ namespace BTK_SampleProject.Services
                 return null;
             
             }
-            return category;
+            _responseModel.Data = category;
+            _responseModel.isSuccess = true;
+            _responseModel.Message = ResponseMessages.Listelendi;
+            return _responseModel;
         
         }
 
-        public async Task<Category> UpdateCategory(Guid categoryId, UpdateCategoryDTO categoryDTO)
+        public async Task<BaseResponseModel> UpdateCategory(Guid categoryId, UpdateCategoryDTO categoryDTO)
         {
             var category = await _context.Categories.FindAsync(categoryId);
             if (category is not null)
@@ -62,7 +76,10 @@ namespace BTK_SampleProject.Services
                 _context.Categories.Update(category);
                 if (await _context.SaveChangesAsync() > 0)
                 {
-                    return category;
+                    _responseModel.Data = category;
+                    _responseModel.isSuccess = true;
+                    _responseModel.Message = ResponseMessages.Güncellendi;
+                    return _responseModel;
                 }
             }
             return null;

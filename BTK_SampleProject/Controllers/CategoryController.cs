@@ -1,9 +1,6 @@
-﻿using BTK_SampleProject.AppDbContext;
-using BTK_SampleProject.Entities;
-using BTK_SampleProject.Models;
+﻿using BTK_SampleProject.Models;
 using BTK_SampleProject.Services.Interface;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace BTK_SampleProject.Controllers
 {

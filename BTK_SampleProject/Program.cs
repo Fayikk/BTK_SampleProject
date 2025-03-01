@@ -1,5 +1,6 @@
 using BTK_SampleProject.AppDbContext;
 using BTK_SampleProject.Mapper;
+using BTK_SampleProject.Response;
 using BTK_SampleProject.Services;
 using BTK_SampleProject.Services.Interface;
 using Microsoft.EntityFrameworkCore;
@@ -15,7 +16,7 @@ builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IProductService, ProductService>();
-
+builder.Services.AddScoped(typeof(BaseResponseModel));
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

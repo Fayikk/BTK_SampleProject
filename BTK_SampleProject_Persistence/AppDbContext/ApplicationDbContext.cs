@@ -1,4 +1,5 @@
-﻿using BTK_SampleProject.Entities;
+﻿
+using BTK_SampleProject.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace BTK_SampleProject.AppDbContext
