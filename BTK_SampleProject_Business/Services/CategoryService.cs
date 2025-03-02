@@ -5,6 +5,8 @@ using BTK_SampleProject.Messages;
 using BTK_SampleProject.Models;
 using BTK_SampleProject.Response;
 using BTK_SampleProject.Services.Interface;
+using BTK_SampleProject_Business.FluentValidator;
+using FluentValidation.Results;
 using Microsoft.EntityFrameworkCore;
 
 namespace BTK_SampleProject.Services
@@ -29,6 +31,19 @@ namespace BTK_SampleProject.Services
             //category.CategoryDescription = model.CategoryDescription;
             Category category = _mapper.Map<Category>(model);
             #endregion
+
+            var categoryValidator = new CategoryValidator();
+
+            ValidationResult result = categoryValidator.Validate(category);
+
+            if (!result.IsValid)
+            {
+                result.Errors.ForEach(x => _responseModel.Errors.Add(x.ErrorMessage));
+                _responseModel.isSuccess = false;
+                _responseModel.Message = ResponseMessages.Hata;
+                return _responseModel;
+            }
+
 
 
             await _context.Categories.AddAsync(category);

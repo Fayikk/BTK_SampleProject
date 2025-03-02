@@ -1,5 +1,6 @@
 ﻿using BTK_SampleProject.Models;
 using BTK_SampleProject.Services.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BTK_SampleProject.Controllers
@@ -18,6 +19,7 @@ namespace BTK_SampleProject.Controllers
         //400,404,500,200 ok
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> CreateCategory(CategoryDTO model)
         {
             var result = await _categoryService.AddCategory(model);
