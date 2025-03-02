@@ -41,7 +41,7 @@ namespace BTK_SampleProject.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("BTK_SampleProject.Entities.Product", b =>
@@ -71,7 +71,7 @@ namespace BTK_SampleProject.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
                 });
 
             modelBuilder.Entity("BTK_SampleProject.Entities.Product", b =>
