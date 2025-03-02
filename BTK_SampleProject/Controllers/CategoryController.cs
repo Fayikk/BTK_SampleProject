@@ -19,7 +19,7 @@ namespace BTK_SampleProject.Controllers
         //400,404,500,200 ok
 
         [HttpPost]
-        [Authorize]
+        [Authorize(Roles = "SuperAdmin")]
         public async Task<IActionResult> CreateCategory(CategoryDTO model)
         {
             var result = await _categoryService.AddCategory(model);

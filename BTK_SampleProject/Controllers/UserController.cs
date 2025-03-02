@@ -22,7 +22,7 @@ namespace BTK_SampleProject.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(UserLoginDTO loginDTO)
         {
-            if (loginDTO.UserName == "admin" && loginDTO.Password=="123")
+            if (loginDTO.UserName == "superadmin" && loginDTO.Password=="123")
             {
                 return Ok(GenerateJwtToken(loginDTO.UserName));
             }
@@ -43,7 +43,9 @@ namespace BTK_SampleProject.Controllers
             var claims = new List<Claim>
  {
      new Claim(ClaimTypes.Name, username),
+     new Claim(ClaimTypes.Role, "SuperAdmin"),
      new Claim(ClaimTypes.Role, "Admin"),
+     new Claim(ClaimTypes.Role, "SuperVisor"),
      new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()) // Token ID
  };
 
